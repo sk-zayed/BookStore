@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock title %}
+
+{% block navlistitem %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="/">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'sellbooks' %}">Sell Book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+</li>
+{% endblock navlistitem %}
+
+{% block body %}
+
+
+<div class="container">
+    <ul class="list-unstyled">
+        {% for i in book %}
+        <li>
+            <a href="/detailedview/{{i.book_id}}" class="link-dark text-decoration-none">
+                <div class="row">
+                    <div class="col-md-4 d-flex justify-content-center p-5">
+                        <img src="/media/{{ i.image }}" class="img-fluid px-5" alt="">
+                    </div>
+                    <div class="col-md-8 p-5 my-auto">
+                        <p class="fs-2">{{ i.book_name }}</p>
+                        <p class="fs-5">{{ i.book_desc|slice:"0:150" }}...</p>
+                        <p class="fs-2">₹{{ i.price }}</p>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <hr class="featurette-divider">
+
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock body %}

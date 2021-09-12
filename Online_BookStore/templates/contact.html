@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Contact{% endblock title %}
+
+{% block navlistitem %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="/">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href={% url 'sellbooks' %}>Sell Book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+</li>
+{% endblock navlistitem %}
+
+{% block body %}
+
+<div class="container p-5">
+    <form action="/contact/" class="row g-3" method="POST">
+        {% csrf_token %}
+        <h3>Contact us</h3>
+        <div class="col-sm-12">
+            <label class="form-label" for="firstname">First name:</label>
+            <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter your first name"
+                required>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label" for="lastname">Last name:</label>
+            <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter your last name"
+                required>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label" for="email">Email:</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label" for="phone">Phone:</label>
+            <input type="mobile" class="form-control" name="phone" id="phone" pattern="[0-9]{10}"
+                placeholder="Enter your mobile number" required>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label" for="desc">How may we help you ?</label>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="How may we help you" name="desc" id="desc"
+                    style="height: 100px"></textarea>
+                <label for="desc">Concern</label>
+            </div>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="col-12">
+            <button class="btn btn-dark" type="submit">Submit</button>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                data-bs-target="#loginmodal">Submit</button>
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock body %}

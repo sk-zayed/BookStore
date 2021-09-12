@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Tracker{% endblock title %}
+
+{% block navlistitem %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="/">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'sellbooks' %}">Sell Book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="{% url 'tracker' %}">Tracker</a>
+</li>
+{% endblock navlistitem %}
+
+{% block body %}
+
+<div class="container p-5">
+    <div class="card bg-light  border-dark">
+        <div class="card-header fs-3">
+            Your order
+        </div>
+    </div>
+
+    <h3 class="pt-5 pb-3">Please enter order id and email to track your order</h3>
+    <form class="row g-3" action="#" id="trackerForm" method="POST">
+        {% csrf_token %}
+        <div class="col-md-12">
+            <label for="orderId" class="form-label">Order Id:</label>
+            <input type="text" class="form-control" name="orderId" placeholder="Order Id" required>
+        </div>
+        <div class="col-md-12">
+            <label for="trackemail" class="form-label">Email:</label>
+            <input type="email" class="form-control" name="trackemail" placeholder="Email" required>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="col-12">
+            <button class="btn btn-dark" type="submit">Track order</button>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                data-bs-target="#loginmodal">Track order</button>
+                </div>
+        {% endif %}
+        </form> 
+        <div class="col pt-5">
+            <h3>Your order status:</h3>
+            <div class="my-4">
+                <ul class="list-group" id="items">
+                    Enter your Order Id and Email to track your order details...
+                </ul>
+            </div>
+        </div>
+</div>
+
+{% endblock body %}
+
+{% block js %}
+<script>
+    $(window).on('load', function() {
+        {% if not user.is_authenticated %}
+        $('#loginmodal').modal('show');
+        {% endif %}
+    });
+    
+    $("#trackerForm").submit(function (event) {
+        $("#items").empty();
+        $.ajax({
+            type: "POST",
+            url: "/tracker/",
+            data: {"orderId": $("input[name=orderId]").val(),
+                "trackemail": $("input[name=trackemail]").val(),
+                "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+            },
+            encode: true
+        }).done(function (data) {
+            updates = JSON.parse(data);
+            if (updates.length>0) {
+                for (i = 0; i < updates.length; i++) {
+                    let text = updates[i]["text"];
+                    let time = updates[i]["time"];
+                    mystr = `<li class= "list-group-item d-flex justify-content-between ">
+                                ${text}
+                                <span class="badge bg-dark badge-pill">${time}</span>
+                                </li>`
+                    $("#items").append(mystr);
+                }
+            }
+            else {
+                mystr = `<li class= "list-group-item d-flex justify-content-between align-items-center">
+                                Please make sure you enter correct Order Id and Email.
+                                </li>`
+                $("#items").append(mystr);
+            }
+        });
+        event.preventDefault();
+    })
+
+</script>
+{% endblock js %}

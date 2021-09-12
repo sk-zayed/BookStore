@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock title %}
+
+{% block navlistitem %}
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="/">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'sellbooks' %}">Sell Book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+</li>
+{% endblock navlistitem %}
+
+{% block body %}
+
+
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+            aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+            aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://source.unsplash.com/1560x700/?library" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>Welcome to the BookStore</h3>
+                <p>Get the your unfulfilled desire at your door step.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://source.unsplash.com/1560x700/?book" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>Sell your old books</h3>
+                <p>Sell your old books whenever you want by sitting at home.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://source.unsplash.com/1560x700/?oldbook" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>Buy old books</h3>
+                <p>Quality old books availabe at low cost ;)</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-6 d-flex flex-column p-5 bg-light">
+            <h3 class="pt-2">Books at low cost !!</h3>
+            <br>
+            <p>Searching for a combo of good and cheap book ??</p>
+            <p>Then you are at right place ;)</p>
+            <p>Get your desired book at very reasonable cost at your doorstep from the best book selling plateform.
+            </p>
+            <br>
+            <div class="btn-group d-grid gap-2 d-md-block">
+                <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                    data-bs-display="static" aria-expanded="false">Category
+                </button>
+                <ul class="dropdown-menu dropdown-menu-lg-start">
+                    {% for i in category %}
+                    <li><a class="dropdown-item" href="/category/{{i}}">{{i}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <br>
+        </div>
+        <div class="col-sm-6 d-flex justify-content-start p-0">
+            <img src="media/images/new-row.jpg" class="img-fluid" alt="">
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-6 d-flex justify-content-end p-0">
+            <img src="media/images/sell-row.jpg" class="img-fluid" alt="">
+        </div>
+        <div class="col-sm-6 d-flex flex-column p-5 bg-light">
+            <h3 class="pt-2">Willing to sell your old book ??</h3>
+            <br>
+            <p>Here we go ;)</p>
+            <p>Sell your old books at 40% of actual cost. Relpace your old with new ones and enjoy reading.</p>
+            <p>Love the life, love the BOOKS ;)</p>
+            <br>
+            <div class="d-grid gap-2 d-md-block">
+                <a class="btn btn-dark" href="{% url 'sellbooks' %}" role="button">Sell now</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-6 d-flex flex-column p-5 bg-light">
+            <h3 class="pt-2">Get old books at lesser cost !!</h3>
+            <br>
+            <p>Don't wanna spend much on new book ??</p>
+            <p>We have a solution for that too ;)</p>
+            <p>Get old books at 60% of actual cost. Quality old books are promissed.</p>
+            <br>
+            <div class="d-grid gap-2 d-md-block">
+                <a class="btn btn-dark" href="{% url 'old' %}" role="button">Buy old Book</a>
+            </div>
+        </div>
+        <div class="col-sm-6 d-flex justify-content-start p-0">
+            <img src="media/images/old-row.jpg" class="img-fluid" alt="">
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card h-100 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">FREE SHIPPING</h5>
+                    <p class="card-text">No delivary charges on minimum order of ₹499.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">EASY RETURN</h5>
+                    <p class="card-text">Easy return or replace within 10 days of delivary.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">QUALITY CHECK</h5>
+                    <p class="card-text">Check quality of old Books on customer service call.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+    <div class="card bg-light  border-dark">
+        <div class="card-header">
+            Quote
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>“Today a reader, tomorrow a leader.”</p>
+                <footer class="blockquote-footer">Margaret Fuller <cite title="Source Title">(American writer &
+                        journalist)</cite></footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Sell Books{% endblock title %}
+
+{% block navlistitem %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="/">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" href="{% url 'sellbooks' %}">Sell Book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+</li>
+{% endblock navlistitem %}
+
+{% block body %}
+<div class="container">
+<h3 class="pt-5 pb-3">Fill your details</h3>
+    <form class="row g-3" action="/sellbooks/" method="POST">
+        {% csrf_token %}
+        <div class="col-md-6">
+            <label for="firstname" class="form-label">First name:</label>
+            <input type="text" class="form-control" name="firstname" id="firstname" placeholder="First name" required>
+        </div>
+        <div class="col-md-6">
+            <label for="lastname" class="form-label">Last name:</label>
+            <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Last name" required>
+        </div>
+        <div class="col-md-6">
+            <label for="email" class="form-label">Email:</label>
+            <div class="input-group">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="phone" class="form-label">Mobile numer:</label>
+            <div class="input-group">
+                <input type="phone" class="form-control" name="phone" id="phone" placeholder="Mobile number" required>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label for="address" class="form-label">Address:</label>
+            <input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
+        </div>
+        <div class="col-md-4">
+            <label for="city" class="form-label">City:</label>
+            <input type="text" class="form-control" name="city" id="city" placeholder="City" required>
+        </div>
+        <div class="col-md-4">
+            <label for="state" class="form-label">State:</label>
+            <input type="text" class="form-control" name="state" id="state" placeholder="State" required>
+        </div>
+        <div class="col-md-4">
+            <label for="zipcode" class="form-label">Zip code:</label>
+            <input type="number" class="form-control" name="zipcode" id="zipcode" placeholder="Zip code" required>
+        </div>
+         <div class="col-sm-6">
+                <label for="bookname" class="form-label">Book name:</label>
+                <input type="text" class="form-control" name="bookname" id="bookname" placeholder="Book name" required>
+            </div>
+            <div class="col-sm-3 btn-group d-grid">
+                <label for="category" class="form-label">Book category:</label>
+                <select name="category" id="category" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                    data-bs-display="static" aria-expanded="false">
+        <option selected disabled>Category</option>
+        <option value="philosophy">Philosophy</option>
+        <option value="novel">Novel</option>
+        <option value="fiction">Fiction</option>
+    </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="bookimage" class="form-label">Pic of Book:</label>
+                <input class="form-control btn-dark" type="file" name="bookimage" id="bookimage" required>
+            </div>
+        <div class="col-12">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="tnc_checkbox" id="tnc_checkbox" required>
+                <label class="form-check-label" for="tnc_checkbox">
+                    Agree to terms and conditions
+                </label>
+            </div>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="col-12">
+            <button class="btn btn-dark" type="submit">Sell Book</button>
+        </div>
+        {% else %}
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                data-bs-target="#loginmodal">Login</button>
+        {% endif %}
+    </form>
+</div>
+{% endblock body %}
