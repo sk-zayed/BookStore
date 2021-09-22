@@ -1,16 +1,11 @@
-i.logo{
-    color: aquamarine;
-}
 .xyz{
-    color: red;
-    /* display: none; */
+    display: none;
     margin-top: 5px;
 }
 
-@media (max-width:1200px) {
+@media (max-width:991px) {
     .xyz{
         display: block;
-        background-color: red;
     }
     .abc{
         display: none;
