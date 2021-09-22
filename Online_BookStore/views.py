@@ -14,6 +14,7 @@ def index(request):
 
 def userSignUp(request):
     if request.method == "POST":
+        next = request.POST.get('next', '')
         signupusername = request.POST.get("signupusername", "")
         firstname = request.POST.get("firstname", "")
         lastname = request.POST.get("lastname", "")
@@ -23,25 +24,22 @@ def userSignUp(request):
 
         if len(signupusername) > 10:
            messages.error(request, "Username must be under 10 character.")
-           return redirect("home") 
+           return redirect(next) 
 
         if not signupusername.isalnum():
             messages.error(request, "Username cannot contain special character.")
-            return redirect("home")
+            return redirect(next)
 
         if pass1 != pass2:
             messages.error(request, "Password did not match.")
-            return redirect("home")
+            return redirect(next)
 
         myuser = User.objects.create_user(signupusername, email, pass1)
         myuser.first_name = firstname
         myuser.last_name = lastname
         myuser.save()
         messages.success(request, "Your BookStore accout has been successfully created.")
-        return redirect("home")
-
-    else:
-        return redirect("home")
+        return redirect(next)
 
 
 def userLogin(request):
@@ -62,14 +60,23 @@ def userLogin(request):
             return HttpResponseRedirect(next)
 
 
-    else:
-        return redirect("home")
-
-
 def userLogout(request):
     logout(request)
     messages.success(request, "Loggedout successfully.")
     return redirect("home")
+
+
+def search(request):
+    query = request.GET.get("query", "")
+
+    if len(query) > 25 or not query or query.isspace():
+        booklist = Book.objects.none()
+
+    else:
+        booklist = Book.objects.filter(book_name__icontains=query)
+        
+    param = {"book": booklist, "query": query, "title": "Search results"}
+    return render(request, "listview.html", param)
 
 
 def about(request):
@@ -87,24 +94,29 @@ def contact(request):
                           email=email, phone=phone, desc=desc)
         contact.save()
         messages.success(request, "Thank you for contacting us. Your query would be reviewed by our team soon.")
-    return redirect(reverse("contact"))
+
+    return render(request, "contact.html")
 
 
 def category(request, category):
     booklist = []
     books = Book.objects.filter(category=category)
+
     for book in books:
         booklist.append(book)
+
     param = {"book": booklist, "title": category}
     return render(request, "listview.html", param)
 
 
 def old(request):
-    cat = []
+    old = []
     books = Book.objects.filter(category="Old")
+
     for book in books:
-        cat.append(book)
-    param = {"book": cat, "title": "Old"}
+        old.append(book)
+
+    param = {"book": old, "title": "Old"}
     return render(request, "listview.html", param)
 
 
@@ -190,22 +202,25 @@ def tracker(request):
     if request.method == "POST":
         orderId = request.POST.get("orderId", "")
         email = request.POST.get("trackemail", "")
+        updates = []
+
         try:
             cemail = Customer.objects.filter(order__order_id=orderId)[0].email
+
             if cemail==email:
-                updates = []
                 update = OrderUpdate.objects.filter(order_id=orderId)
+
                 for item in update:
                     updates.append(
                         {'text': item.update_desc, 'time': item.timestamp})
                     response = json.dumps(updates, default=str)
                 return HttpResponse(response)
+
             else:
-                updates = []
                 response = json.dumps(updates, default=str)
                 return HttpResponse(response)
+                
         except:
-            updates = []
             response = json.dumps(updates, default=str)
             return HttpResponse(response)
 

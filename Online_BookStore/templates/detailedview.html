@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
+
 {% block title %}{{book.book_name}}{% endblock title %}
 
+
 {% block navlistitem %}
+
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="/">Home</a>
 </li>
@@ -13,11 +16,18 @@
     <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+{% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+{% else %}
+        <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginmodal">Tracker</a>
+{% endif %}
 </li>
+
 {% endblock navlistitem %}
 
+
 {% block body %}
+
 <div class="container">
     <div class="row">
         <div class="col-md-4 d-flex justify-content-center p-5">
@@ -27,18 +37,14 @@
             <p class="fs-2">{{ book.book_name }}</p>
             <p class="fs-5">{{ book.book_desc }}</p>
             <p class="fs-2">₹{{ book.price }}</p>
+            <button class="btn btn-dark">Add to cart</button>
             {% if user.is_authenticated %}
-            <button class="btn btn-dark">Add to cart
-                </button>
-            <a href="/checkout/{{book.book_id}}"><button class="btn btn-dark ">BUY
-                    NOW</button></a>
+            <a href="/checkout/{{book.book_id}}"><button class="btn btn-dark ">BUY NOW</button></a>
             {% else %}
-            <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-                data-bs-target="#loginmodal">Add to cart</button>
-            <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-                data-bs-target="#loginmodal">BUY NOW</button>
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#loginmodal">BUY NOW</button>
             {% endif %}
         </div>
     </div>
 </div>
+
 {% endblock body %}

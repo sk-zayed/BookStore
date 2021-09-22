@@ -1,0 +1,13 @@
+.xyz{
+    display: none;
+    margin-top: 5px;
+}
+
+@media (max-width:991px) {
+    .xyz{
+        display: block;
+    }
+    .abc{
+        display: none;
+    }
+}

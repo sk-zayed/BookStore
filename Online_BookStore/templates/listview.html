@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
+
 {% block title %}{{title}}{% endblock title %}
 
+
 {% block navlistitem %}
+
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="/">Home</a>
 </li>
@@ -10,37 +13,68 @@
     <a class="nav-link" href="{% url 'sellbooks' %}">Sell Book</a>
 </li>
 <li class="nav-item">
+{% if request.get_full_path == "/old/"%}
+    <a class="nav-link active" href="{% url 'old' %}">Buy old book</a>
+{% else %}
     <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
+{% endif %}
 </li>
 <li class="nav-item">
+{% if user.is_authenticated %}
     <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+{% else %}
+    <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginmodal">Tracker</a>
+{% endif %}
 </li>
+
 {% endblock navlistitem %}
+
 
 {% block body %}
 
-
 <div class="container">
-    <ul class="list-unstyled">
-        {% for i in book %}
-        <li>
-            <a href="/detailedview/{{i.book_id}}" class="link-dark text-decoration-none">
-                <div class="row">
-                    <div class="col-md-4 d-flex justify-content-center p-5">
-                        <img src="/media/{{ i.image }}" class="img-fluid px-5" alt="">
-                    </div>
-                    <div class="col-md-8 p-5 my-auto">
-                        <p class="fs-2">{{ i.book_name }}</p>
-                        <p class="fs-5">{{ i.book_desc|slice:"0:150" }}...</p>
-                        <p class="fs-2">₹{{ i.price }}</p>
-                    </div>
+    {% if book|length < 1 %} 
+        {% if request.get_full_path == "/old/"%}
+            <p class="fs-3 pt-5">Unfortunately, the following items that you searched are now out-of-stock. Although we try our best to maintain 100% accuracy with inventory, there are rare occasions where we experience an inventory error.</p>
+        {% else %}
+            {% if query|wordcount == 0 %}
+                <p class="fs-3 pt-5">Please type something before making search query.</p>
+            {% else %}
+                <p class="fs-3 pt-5">Could not find any match for <b>{{ query }}</b>.</p>
+                <div class="fs-5">
+                    Suggestions:
+                    <ul>
+                        <li>Make sure that all words are spelled correctly.</li>
+                        <li>Try different keywords.</li>
+                        <li>Try more general keywords.</li>
+                        <li>Try fewer keywords.</li>
+                    </ul>
                 </div>
-            </a>
-        </li>
-        <hr class="featurette-divider">
-
-        {% endfor %}
-    </ul>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <ul class="list-unstyled">
+            {% for i in book %}
+                <li>
+                    <a href="/detailedview/{{i.book_id}}" class="link-dark text-decoration-none">
+                        <div class="row">
+                            <div class="col-md-4 d-flex justify-content-center p-5">
+                                <img src="/media/{{ i.image }}" class="img-fluid px-5" alt="">
+                            </div>
+                            <div class="col-md-8 p-5 my-auto">
+                                <p class="fs-2">{{ i.book_name }}</p>
+                                <p class="fs-5">{{ i.book_desc|slice:"0:150" }}...</p>
+                                <p class="fs-2">₹{{ i.price }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {% if forloop.revcounter != 1 %}
+                    <hr class="featurette-divider">
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
 </div>
 
 {% endblock body %}

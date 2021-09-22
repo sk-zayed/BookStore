@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
+
 {% block title %}Sell Books{% endblock title %}
 
+
 {% block navlistitem %}
+
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="/">Home</a>
 </li>
@@ -13,13 +16,20 @@
     <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
 </li>
 <li class="nav-item">
+{% if user.is_authenticated %}
     <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+{% else %}
+    <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginmodal">Tracker</a>
+{% endif %}
 </li>
+
 {% endblock navlistitem %}
 
+
 {% block body %}
+
 <div class="container">
-<h3 class="pt-5 pb-3">Fill your details</h3>
+    <h3 class="pt-5 pb-3">Fill your details</h3>
     <form class="row g-3" action="/sellbooks/" method="POST">
         {% csrf_token %}
         <div class="col-md-6">
@@ -59,23 +69,23 @@
             <input type="number" class="form-control" name="zipcode" id="zipcode" placeholder="Zip code" required>
         </div>
          <div class="col-sm-6">
-                <label for="bookname" class="form-label">Book name:</label>
-                <input type="text" class="form-control" name="bookname" id="bookname" placeholder="Book name" required>
-            </div>
-            <div class="col-sm-3 btn-group d-grid">
-                <label for="category" class="form-label">Book category:</label>
-                <select name="category" id="category" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
-                    data-bs-display="static" aria-expanded="false">
-        <option selected disabled>Category</option>
-        <option value="philosophy">Philosophy</option>
-        <option value="novel">Novel</option>
-        <option value="fiction">Fiction</option>
-    </select>
-            </div>
-            <div class="col-sm-3">
-                <label for="bookimage" class="form-label">Pic of Book:</label>
-                <input class="form-control btn-dark" type="file" name="bookimage" id="bookimage" required>
-            </div>
+            <label for="bookname" class="form-label">Book name:</label>
+            <input type="text" class="form-control" name="bookname" id="bookname" placeholder="Book name" required>
+        </div>
+        <div class="col-sm-3 btn-group d-grid">
+            <label for="category" class="form-label">Book category:</label>
+            <select name="category" id="category" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                data-bs-display="static" aria-expanded="false">
+                <option selected disabled>Category</option>
+                <option value="philosophy">Philosophy</option>
+                <option value="novel">Novel</option>
+                <option value="fiction">Fiction</option>
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <label for="bookimage" class="form-label">Pic of Book:</label>
+            <input class="form-control btn-dark" type="file" name="bookimage" id="bookimage" required>
+        </div>
         <div class="col-12">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="tnc_checkbox" id="tnc_checkbox" required>
@@ -84,14 +94,15 @@
                 </label>
             </div>
         </div>
-        {% if user.is_authenticated %}
         <div class="col-12">
+        {% if user.is_authenticated %}
             <button class="btn btn-dark" type="submit">Sell Book</button>
-        </div>
         {% else %}
             <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-                data-bs-target="#loginmodal">Login</button>
+                data-bs-target="#loginmodal">Sell Book</button>
         {% endif %}
+        </div>
     </form>
 </div>
+
 {% endblock body %}

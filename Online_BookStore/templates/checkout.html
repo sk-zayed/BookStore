@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
+
 {% block title %}Checkout · {{book.book_name}}{% endblock title %}
 
+
 {% block navlistitem %}
+
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="/">Home</a>
 </li>
@@ -12,10 +15,18 @@
 <li class="nav-item">
     <a class="nav-link" href="{% url 'old' %}">Buy old book</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
-</li>
+{% if user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'tracker' %}">Tracker</a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginmodal">Tracker</a>
+    </li>
+{% endif %}
+
 {% endblock navlistitem %}
+
 
 {% block body %}
 
@@ -85,7 +96,9 @@
 
 {% endblock body %}
 
+
 {% block js %}
+
 <script>
     $(window).on('load', function() {
         {% if not user.is_authenticated %}
@@ -93,4 +106,5 @@
         {% endif %}
     });
 </script>
+
 {% endblock js %}

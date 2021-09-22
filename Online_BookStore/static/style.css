@@ -1,12 +1,16 @@
-
+i.logo{
+    color: aquamarine;
+}
 .xyz{
-    display: none;
+    color: red;
+    /* display: none; */
     margin-top: 5px;
 }
 
-@media screen and (max-width:1200px) {
+@media (max-width:1200px) {
     .xyz{
         display: block;
+        background-color: red;
     }
     .abc{
         display: none;
