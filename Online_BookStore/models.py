@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
+import datetime
 
 # Create your models here.
 
@@ -54,7 +55,7 @@ class OrderUpdate(models.Model):
     update_id = models.AutoField(primary_key=True)
     order = models.ForeignKey(Order, on_delete=CASCADE)
     update_desc = models.CharField(max_length=5000)
-    timestamp = models.DateField(auto_now_add=True)
+    timestamp = models.DateTimeField(datetime.datetime.now())
 
     def __str__(self):
         return str(self.order_id)+" - "+self.update_desc

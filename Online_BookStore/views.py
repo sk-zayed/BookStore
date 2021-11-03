@@ -4,8 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, authenticate, login, logout
 from .models import Customer, Book, Contact, Order, OrderUpdate, SoldBook
 from django.urls import reverse
-from django.http import HttpResponseRedirect
-import json
+import json, datetime
 
 # Create your views here.
 def index(request):
@@ -53,11 +52,11 @@ def userLogin(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Logged in successfully.")
-            return HttpResponseRedirect(next)
+            return redirect(next)
 
         else:
             messages.error(request, "Invalid username or password.")
-            return HttpResponseRedirect(next)
+            return redirect(next)
 
 
 def userLogout(request):
@@ -190,7 +189,7 @@ def checkoutform(request, bookid):
         order.save()
 
         update = OrderUpdate(order_id=order.order_id,
-                             update_desc="The order has been placed.")
+                             update_desc="The order has been placed.", timestamp=str(datetime.datetime.now())[:-7])
         update.save()
 
         messages.success(request, f"Thank you for ordering {bookname}. Your tracker id for the order is {order.order_id}.")
